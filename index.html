@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Car configurator</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="main.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand">
+
+		<style>
+			body {
+				color: #444;
+				background: #eee;
+			}
+			a {
+				color: #08f;
+			}
+
+			.colorPicker {
+				display: inline-block;
+				margin: 0 0px;
+			}
+
+
+			/* Loading screen */
+			html, body {
+				overflow: hidden;
+				margin: 0;
+				width: 100%;
+				height: 100%;
+			}
+
+			#loading-screen {
+				position: absolute;
+				z-index: 2;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: #000000;
+				opacity: 1;
+ 				transition: 1s opacity;
+			}
+
+
+			#loading-screen.fade-out {
+				opacity: 0;
+			}
+
+			#loader {
+				display: block;
+				position: relative;
+				left: 50%;
+				top: 50%;
+				width: 150px;
+				height: 150px;
+				margin: -75px 0 0 -75px;
+				border-radius: 50%;
+				border: 3px solid transparent;
+				border-top-color: #9370DB;
+				-webkit-animation: spin 2s linear infinite;
+				animation: spin 2s linear infinite;
+			}
+			#loader:before {
+				content: "";
+				position: absolute;
+				top: 5px;
+				left: 5px;
+				right: 5px;
+				bottom: 5px;
+				border-radius: 50%;
+				border: 3px solid transparent;
+				border-top-color: #BA55D3;
+				-webkit-animation: spin 3s linear infinite;
+				animation: spin 3s linear infinite;
+			}
+			#loader:after {
+				content: "";
+				position: absolute;
+				top: 15px;
+				left: 15px;
+				right: 15px;
+				bottom: 15px;
+				border-radius: 50%;
+				border: 3px solid transparent;
+				border-top-color: #FF00FF;
+				-webkit-animation: spin 1.5s linear infinite;
+				animation: spin 1.5s linear infinite;
+			}
+			@-webkit-keyframes spin {
+				0%   {
+					-webkit-transform: rotate(0deg);
+					-ms-transform: rotate(0deg);
+					transform: rotate(0deg);
+				}
+				100% {
+					-webkit-transform: rotate(360deg);
+					-ms-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@keyframes spin {
+				0%   {
+					-webkit-transform: rotate(0deg);
+					-ms-transform: rotate(0deg);
+					transform: rotate(0deg);
+				}
+				100% {
+					-webkit-transform: rotate(360deg);
+					-ms-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+
+			/* Bottom navigation */
+			.navbar {
+			  background-color: rgba(0, 0, 0, 0.6);
+			  position: fixed;
+			  bottom: 0;
+			  width: 100%;
+  				-moz-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				pointer-events: none;
+
+			}
+
+			/* Navigation links */
+			.navbar a {
+
+			  float: left;
+			  color: white;
+			  text-decoration: none;
+			  font-size: 1.875vw;
+			  font-family: 'Quicksand', sans-serif;
+			  width: 25%; /* Four equal-width links */
+			  height:100%;
+			  padding: 3.466204506065858vh 0;
+			  text-align: center;
+			  border-radius: 12px;
+			  				  border-width:0.234375vw;
+			  line-height: 100%;
+
+			}
+
+			/* Add a background color on mouse-over */
+			.navbar a:hover {
+			  background-color: #000;
+
+			}
+
+			/* Style the current/active link */
+			.navbar a.active {
+			  background-color: #FFFFFF;
+			  			  color: #000000;
+
+			}
+
+			/* The side navigation menu */
+			.sidenav {
+			margin-bottom: 0px;
+			height: 100%;
+			  width: 0; /* change with javascript */
+			  position: fixed; /* Stay in place */
+			  top: 0; /* Stay at the top */
+			  left: 0;
+			  background-color: rgba(0, 0, 0, 0);
+			  overflow-x: hidden; /* Disable horizontal scroll */
+			  padding-top: 0px; /* Place content 60px from the top */
+			  transition: 0s; /*transition effect to slide in the sidenav */
+			  -moz-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				pointer-events: none;
+			}
+
+			/* The navigation menu links */
+			.sidenav a {
+			  display: inline-block;
+			  color: black;
+			  text-align: center;
+			  padding: 0px;
+			  text-decoration: none;
+			  font-size: 0.781vw;
+			  border-radius: 5px;
+			  display: block;
+			  background-color: #fff;
+			  height: 7.813vw;
+			  width: 7.813vw;
+			  margin-top: 5.1993067590987865vh;
+			  margin-left: 3.906vw;
+			  border-style: solid;
+			  				  border-width:0.234375vw;
+
+			}
+
+			.sidenav a:hover {
+			  color: #FFFFFF;
+			  text-shadow:0px 0px 30px #fdec6e;
+			  -moz-transition: all 0.2s ease-in;
+			  -o-transition: all 0.2s ease-in;
+			  -webkit-transition: all 0.2s ease-in;
+			  transition: all 0.2s ease-in;
+			}
+
+			/* Add a color to the active/current link */
+			.sidenav a.active {
+			  background-color: dodgerblue;
+			  color: white;
+			}
+
+			.sidenav text {
+			  display: inline-block;
+			  color: black;
+			  -webkit-text-stroke-width: 1px;
+			  -webkit-text-stroke-color: black;
+			    text-shadow: 0px 0px 10px #FFFFFF;
+			  text-align: center;
+			  padding: 0px;
+			  text-decoration: none;
+			  font-size: 0.9375vw;
+			  border-radius: 5px;
+			  display: block;
+			  background-color: #ffffff00;
+			  height: 5.025996533795494vh;
+			  width: 7.8125vw;
+			  margin-left: 4.0625vw;
+			  border-style: hidden;
+			  				  border-width:0.234375vw;
+			  font-family: 'Quicksand', sans-serif;
+			  vertical-align: middle;
+
+
+			}
+
+
+			/* scrollbar */
+			.scrollcontainer {
+			  background-color: rgba(0, 0, 0, 0);
+			  position: fixed;
+			  top: 5.1993067590987865vh;
+			  bottom: 19.930675909878683vh;
+			  width: 100%;
+  				-moz-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				pointer-events: none;
+			}
+
+			.scrollbar
+			{
+				margin-left: 15.625vw;
+				float: left;
+				width: 15.625vw;
+				visibility: hidden;
+				background: #F5F5F5;
+				overflow-y: scroll;
+				overflow-x: hidden;
+				margin-top: 0px;
+				margin-bottom: 0px;
+				height: 100%;
+  				-moz-user-select: auto;
+				-webkit-user-select: auto;
+				-ms-user-select: auto;
+				user-select: auto;
+				pointer-events: auto;
+				  /* We first create a flex layout context */
+				  /*display: flex; */
+  
+				  /* Then we define the flow direction 
+					 and if we allow the items to wrap 
+				   * Remember this is the same as:
+				   * flex-direction: row;
+				   * flex-wrap: wrap;
+				   */
+				  /*flex-flow: row wrap; */
+  
+				  /* Then we define how is distributed the remaining space */
+				  /*justify-content: space-around; */
+  
+				  padding: 0px;
+				  /* list-style: none; */
+				  border-radius: 5px;
+				  border-style: solid;
+				  border-width:0.234375vw;
+			}
+
+			.scrollbar a {
+			  color: black;
+			  text-align: center;
+			  padding: 0px;
+			  text-decoration: none;
+			  font-size: 0.78125vw;
+			  border-radius: 5px;
+			  background-color: #fff;
+			  width: 5.46875vw;
+			  height: 5.46875vw;
+				display: inline-block;
+
+			  border-style: solid;
+				  border-width:0.234375vw;
+			    margin-top: 1.733102253032929vh;
+				margin-bottom: 0px;
+			  margin-left: 0.9765625vw;
+				float: left;
+			}
+
+			.scrollbar b {
+			  color: black;
+			  text-align: center;
+			  text-decoration: none;
+			  font-size: 0.625vw;
+			  width: 5.46875vw;
+			  height: 5.1993067590987865vh;
+			  vertical-align: text-top;
+			  padding-top: 0px;
+			  top: 0px;
+			  line-height: normal;
+			  display: inline-block;
+			  margin-right: 0.390625vw;
+			  margin-top: 0;
+			  font-family: 'Quicksand', sans-serif;
+			  margin-left: 1.09375vw;
+				float: left;
+			} 
+
+			.scollbar a:hover {
+			  background-color: #ddd;
+			  color: black;
+
+			}
+
+			/* Add a color to the active/current link */
+			.scrollbar a.active {
+			  background-color: dodgerblue;
+			  color: white;
+			}
+
+			.force-overflow
+			{
+
+			}
+
+			/*
+			 *  STYLE 1
+			 */
+
+			.scrollbar::-webkit-scrollbar-track
+			{
+				-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+				border-radius: 10px;
+				  border-width:0.234375vw;
+				background-color: #F5F5F5;
+			}
+
+			.scrollbar::-webkit-scrollbar
+			{
+				width: 0.9375vw;
+				background-color: #F5F5F5;
+			}
+
+			.scrollbar::-webkit-scrollbar-thumb
+			{
+				border-radius: 10px;
+				  border-width:0.234375vw;
+				-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+				background-color: #6a6a6a;
+			}
+
+			.scrollbar::-webkit-scrollbar-thumb:hover {
+			  background: #555;
+			}
+
+			.mainBodyColor{
+
+			}
+
+			.metallic{
+
+			}
+
+/* Price */
+			.price_div {
+			  background-color: rgba(0, 0, 0, 0);
+			  overflow: auto;
+			  position: fixed;
+			  bottom: 11.091854419410746vh;
+			  width: 100%;
+  				-moz-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				pointer-events: none;
+			}
+
+			/* Navigation links */
+			.price_div a {
+			  background-color: #FFFFFF;
+			  float: right;
+			  bottom: 0px;
+			  margin: 0.9375vw;
+			  padding: 0px;
+			  color: black;
+			  text-decoration: none;
+			  font-size: 1.09375vw;
+			  font-family: 'Quicksand', sans-serif;
+			  width: 10%; /* Four equal-width links */
+			  height:100%;
+			  text-align: center;
+			  border-radius: 12px;
+			}
+
+			.rotateIcon {
+			  background-color: rgba(0, 0, 0, 0);
+			  overflow: auto;
+			  position: fixed;
+			  top: 0px;
+			  height: 50%;
+			  width: 100%;
+  				-moz-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				pointer-events: none;
+			}
+			.rotateIcon a {
+				margin-right: 10px;
+				margin-top: 10px;
+				top: 0px;
+				float: right;
+				display: inline-block;
+				height: 20px;
+				width: 20px;
+			  	border-radius: 2px;
+			}
+
+			.tooltip {
+			position: relative;
+			}
+
+			.tooltip .tooltiptext {
+			  visibility: hidden;
+			  width: 160px;
+			  background-color: black;
+			  color: #fff;
+			  text-align: center;
+			  border-radius: 6px;
+			  font-size: 8px;
+			  font-family: 'Quicksand', sans-serif;
+			  position: absolute;
+			  z-index: 1;
+			  top: 25px;
+			  right: 0%;
+
+  
+			  /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+			  opacity: 0;
+			  transition: opacity 1s;
+			}
+
+			.tooltip:hover .tooltiptext {
+			  visibility: visible;
+			  opacity: 1;
+			}
+
+			.tooltip .tooltiptext::after {
+			  content: " ";
+			  position: absolute;
+			  bottom: 100%;  /* At the top of the tooltip */
+			  right: 5px;
+			  margin-left: -5px;
+			  border-width: 5px;
+			  border-style: solid;
+			  border-color: transparent transparent black transparent;
+			}
+
+			.scrollheader {
+				position: absolute;
+				top: 0.234375vw;
+				/* scrolling out of view :-( */
+				z-index:2;
+				background-color: #A9A9A9;
+				width: 14.6874vw;
+				text-align: center;
+				color: black;
+				border-radius: 5px;
+
+				line-height: 100%;
+			    font-size: 2.5vw;
+
+			    padding: 2.5996533795493932vh 0;
+
+
+				
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<section id="loading-screen">
+
+			<div id="loader"></div>
+
+		</section>
+
+		<div id="info">
+
+
+
+		</div>
+			<div class = "rotateIcon">
+				<a class = "tooltip" id = "infoButton" style = "background: url(/images/info.svg); background-size: cover;"    ><span class="tooltiptext">Thesis project</span></a>
+				<a class = "tooltip" id = "rotatePause" style = "background: url(/images/rotateIcon.jpg); background-size: cover;" href="#"   ><span class="tooltiptext">Enable/disable automatic rotation</span></a>
+			</div>
+		<!-- The navigation menu -->
+
+			<div class="navbar">
+			  <a id = "a-exterior" class="active" onclick="exteriorFunction(this)" href="#">Exterior </a>
+			  <a id = "a-interior"  onclick="interiorFunction(this)" href="#">Interior</a>
+			  <a id = "a-options"  onclick="optionsFunction(this)" href="#">Options</a>
+			  <a id = "a-summary" onclick="summaryFunction(this)" href="#">Summary</a>
+			</div>
+
+			<div class = "price_div">
+				<a id = "price"></a>
+			</div>
+
+			<div id = "exteriorSidenav" class = "sidenav">
+				<a id = "main-colour" onclick="exteriormainFunction(this)" href="#"></a>
+					<text> Main colour </text>
+				<a id = "secondary-colour" style="background-color : #000000" onclick="exteriorsecondaryFunction(this)" href="#"></a>
+					<text> Secondary colour </text>
+				<a id = "wheels" style="background: url(/images/WheelDefault.png); background-size: cover;" onclick="wheelsFunction(this)" href="#"></a>
+					<text> Wheels </text>
+			</div>
+
+			<div id = "interiorSidenav" class = "sidenav">
+				<a id = "Interiorcolour1" onclick="interiormainFunction(this)" href="#"></a>
+					<text> Colour one </text>
+				<a id = "Interiorcolour2" onclick="interiorsecondaryFunction(this)" style="background-color : #000000" href="#"></a>
+					<text> Colour two </text>
+<!--				<a id = "steeringWheel" style="background: url(/images/SteeringWheelDefault.png); background-size: cover;" onclick="steeringWheelFunction(this)" href="#"></a>
+					<text> ??? </text>-->
+			</div>
+
+			<div id = "optionsSidenav" class = "sidenav">
+				<a id = "option1" class = "5000" style="background: url(/images/remoteEngineStart.jpg); background-size: cover;" onclick="checkBox1(this)" href="#">   <img id = "checkBox1" src="/images/check-mark.png" style="width: 7.8125vw; height: 7.8125vw; z-index: 2; margin: 0px; visibility: hidden; background-color: rgb(255,255,255, 0.5)";   /> </a>
+					<text  style="font-size: 9px; line-height: normal" > Remote engine start <br>+&euro;5000 </text>
+				<a id = "option2" class = "20000" style="background: url(/images/parkAssist3.webp); background-size: cover;" onclick="checkBox2(this)" href="#">	 <img id = "checkBox2" src="/images/check-mark.png" style="width: 7.8125vw; height: 7.8125vw; z-index: 2; margin: 0px; visibility: hidden; background-color: rgb(255,255,255, 0.5)";   /> </a>
+					<text style="font-size: 9px; line-height: normal"> Parking assistance <br>+&euro;20000  </text>
+				<a id = "option3" class = "10000" style="background: url(/images/heatedSteeringWheel.jpg); background-size: cover;" onclick="checkBox3(this)" href="#"> <img id = "checkBox3" src="/images/check-mark.png" style="width: 7.8125vw; height: 7.8125vw; z-index: 2; margin: 0px; visibility: hidden; background-color: rgb(255,255,255, 0.5)";   /></a>
+					<text style="font-size: 9px; line-height: normal">Heated steering wheel<br>+&euro;10000  </text>
+			</div>
+
+			<!-- Exterior scrollbar -->
+			<div class = "scrollcontainer">
+				<div id = "exteriormainScrollbar" class="scrollbar">
+				<a class="mainBodyColor" style="background-color : #0000FF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Blue</a>
+				<a class="mainBodyColor" style="background-color : #FF0000; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Red</a> 
+									<b> Blue (Default)</b>
+									<b> Red</b>
+				<a class="mainBodyColor" style="background-color : #FF8C00; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Orange</a> 
+				<a class="mainBodyColor" style="background-color : #FFFFFF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">White</a>
+									<b> Orange </b>
+									<b> White </b>
+				<a class="mainBodyColor" style="background-color : #FFFF00; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Yellow</a>
+				<a class="mainBodyColor" style="background-color : #00FFFF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Light blue</a>
+									<b> Yellow</b>
+									<b> Light blue</b>
+				<a class="mainBodyColor" style="background-color : #808080; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Grey</a>
+				<a class="mainBodyColor" style="background-color : #000000; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Black</a>
+									<b> Grey</b>
+									<b> Black</b>
+				<a class="mainBodyColor metallic 5000" style="background-color : #0000FF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Blue (Metallic) (+&euro;5000)</a>
+				<a class="mainBodyColor metallic 5000" style="background-color : #FF0000; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Red (Metallic) (+&euro;5000)</a> 
+									<b> Blue (Metallic) <br>+&euro;5000 </b>
+									<b> Red (Metallic) <br>+&euro;5000</b>
+				<a class="mainBodyColor metallic 5000" style="background-color : #FF8C00; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Orange (Metallic) (+&euro;5000)</a> 
+				<a class="mainBodyColor metallic 5000" style="background-color : #FFFFFF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">White (Metallic) (+&euro;5000)</a>
+									<b> Orange (Metallic) <br>+&euro;5000</b>
+									<b> White (Metallic) <br>+&euro;5000 </b>
+				<a class="mainBodyColor metallic 5000" style="background-color : #FFFF00; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Yellow (Metallic) (+&euro;5000)</a>
+				<a class="mainBodyColor metallic 5000" style="background-color : #00FFFF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Light blue (Metallic) (+&euro;5000)</a>
+									<b> Yellow (Metallic) <br>+&euro;5000</b>
+									<b> Light blue (Metallic) <br>+&euro;5000</b>
+				<a class="mainBodyColor metallic 5000" style="background-color : #808080; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Grey (Metallic) (+&euro;5000)</a>
+				<a class="mainBodyColor metallic 5000" style="background-color : #000000; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "maincolorPicker(this)">Black (Metallic) (+&euro;5000)</a>
+									<b> Grey (Metallic) <br>+&euro;5000</b>
+									<b> Black (Metallic) <br>+&euro;5000</b>
+					<div class="force-overflow"></div>
+				</div>
+			</div>
+
+			<div class = "scrollcontainer">
+				<div id = "exteriorsecondaryScrollbar" class="scrollbar">
+				<a class="secondaryBodyColor" style="background-color : #000000; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "secondarycolorPicker(this)">Black</a>
+				<a class="secondaryBodyColor" style="background-color : #808080; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "secondarycolorPicker(this)">Grey</a>
+									<b> Black (Default) </b>
+									<b> Grey</b>
+				<a class="secondaryBodyColor" style="background-color : #FF0000; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "secondarycolorPicker(this)">Red</a> 
+				<a class="secondaryBodyColor" style="background-color : #0000FF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "secondarycolorPicker(this)">Blue</a>
+									<b> Red</b>
+									<b> Blue</b>
+				<a class="secondaryBodyColor" style="background-color : #FF8C00; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "secondarycolorPicker(this)">Orange</a> 
+				<a class="secondaryBodyColor" style="background-color : #FFFFFF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "secondarycolorPicker(this)">White</a>
+									<b> Orange</b>
+									<b> White</b>
+				<a class="secondaryBodyColor" style="background-color : #FFFF00; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "secondarycolorPicker(this)">Yellow</a>
+				<a class="secondaryBodyColor" style="background-color : #00FFFF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "secondarycolorPicker(this)">Light blue</a>
+									<b> Yellow</b>
+									<b> Light blue </b>
+
+
+
+
+
+					<div class="force-overflow"></div>
+				</div>
+			</div>
+
+			<div class = "scrollcontainer">
+				<div id = "wheelsScrollbar" class="scrollbar">
+				<a id="wheelsOptionDefault" style="background: url(/images/WheelDefault.png); background-size: cover; text-indent: 100%; white-space: nowrap; overflow: hidden;" class="wheelsOption" style="background-color : #000000" href="#" onclick= "wheelsPicker(this)" >Default</a>
+				<a id="wheelsOptionTwo" style="background: url(/images/WheelOptionTwo.png); background-size: cover; text-indent: 100%; white-space: nowrap; overflow: hidden;" class="wheelsOption 5000" style="background-color : #000000" href="#" onclick= "wheelsPicker(this)" >Option 2 (+&euro;5000)</a>
+									<b> Default</b>
+									<b> Option 2<br>(+&euro;5000) </b>
+				<a id="wheelsOptionThree" style="background: url(/images/WheelOptionThree.png); background-size: cover; text-indent: 100%; white-space: nowrap; overflow: hidden;" class="wheelsOption 10000" style="background-color : #808080" href="#" onclick= "wheelsPicker(this)" >Option 3 (+&euro;10000)</a>
+				<a id="wheelsOptionOne" style="background: url(/images/WheelOptionOne.png); background-size: cover; text-indent: 100%; white-space: nowrap; overflow: hidden;" class="wheelsOption 20000" style="background-color : #808080" href="#" onclick= "wheelsPicker(this)" >Option 4 (+&euro;20000)</a>
+									<b> Option 3<br>(+&euro;10000) </b>
+									<b> Option 4<br>(+&euro;20000) </b>
+
+
+					<div class="force-overflow"></div>
+				</div>
+			</div>			
+
+
+
+			<!-- Interior scrollbar -->
+			<div class = "scrollcontainer">
+				<div id = "interiormainScrollbar" class="scrollbar">
+				<a class="mainInteriorColor" style="background-color : #000000; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerOne(this)">Black</a>
+				<a id = "sameAsMain1" class="mainInteriorColor" style="background-color : #0000FF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerOne(this)">Same as main</a>
+									<b> Black (Default) </b>
+									<b> Same as main</b>
+				<a class="mainInteriorColor" style="background-color : #808080; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerOne(this)">Grey</a>
+				<a class="mainInteriorColor" style="background-color : #222222; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerOne(this)">Dark grey</a>
+									<b> Grey</b>
+									<b> Dark grey</b>
+				<a class="mainInteriorColor" style="background-color : #0000FF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerOne(this)">Blue</a>
+				<a class="mainInteriorColor" style="background-color : #FF0000; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerOne(this)">Red</a> 
+									<b> Blue</b>
+									<b> Red</b>
+				<a class="mainInteriorColor" style="background-color : #FF8C00; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerOne(this)">Orange</a> 
+				<a class="mainInteriorColor" style="background-color : #FFFFFF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerOne(this)">white</a>
+									<b> Orange</b>
+									<b> White</b>
+				<a class="mainInteriorColor" style="background-color : #00FFFF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerOne(this)">Light Blue</a>
+				<a class="mainInteriorColor" style="background-color : #FFFF00; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerOne(this)">Yellow</a>
+									<b> Light blue</b>
+									<b> Yellow</b>
+
+
+
+					<div class="force-overflow"></div>
+				</div>
+			</div>
+
+			<div class = "scrollcontainer">
+				<div id = "interiorsecondaryScrollbar" class="scrollbar">
+				<a id = "sameAsMain2" class="secondaryInteriorColor" style="background-color : #0000FF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerTwo(this)">Same as main</a>
+				<a class="secondaryInteriorColor" style="background-color : #000000; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerTwo(this)">Black</a>
+									<b> Same as main (Default) </b>
+									<b> Black</b>
+				<a class="secondaryInteriorColor" style="background-color : #808080; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerTwo(this)">Grey</a>
+				<a class="secondaryInteriorColor" style="background-color : #222222; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerTwo(this)">Dark Grey</a>
+									<b> Grey</b>
+									<b> Dark grey</b>
+				<a class="secondaryInteriorColor" style="background-color : #FF0000; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerTwo(this)">Red</a> 
+				<a class="secondaryInteriorColor" style="background-color : #0000FF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerTwo(this)">Blue</a>
+									<b> Red</b>
+									<b> Blue</b>
+				<a class="secondaryInteriorColor" style="background-color : #FF8C00; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerTwo(this)">Orange</a> 
+				<a class="secondaryInteriorColor" style="background-color : #FFFFFF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerTwo(this)">White</a>
+									<b> Orange</b>
+									<b> White</b>
+				<a class="secondaryInteriorColor" style="background-color : #FFFF00; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerTwo(this)">Yellow</a>
+				<a class="secondaryInteriorColor" style="background-color : #00FFFF; text-indent: 100%; white-space: nowrap; overflow: hidden;" href="#" onclick= "interiorcolorPickerTwo(this)">Light blue</a>
+									<b> Yellow</b>
+									<b> Light blue</b>
+
+
+					<div class="force-overflow"></div>
+				</div>
+			</div>
+
+			<div class = "scrollcontainer">
+				<div id = "steeringWheelScrollbar" class="scrollbar">
+<!-- 			<a id="steeringWheelOptionDefault" style="background: url(/images/SteeringWheelDefault.png); background-size: cover;" class="steeringWheelOption" style="background-color : #000000" href="#" onclick= "steeringWheelPicker(this)" ></a>
+				<a id="steeringWheelOptionOne" style="background: url(/images/SteeringWheelOptionOne.png); background-size: cover;" class="steeringWheelOption" style="background-color : #808080" href="#" onclick= "steeringWheelPicker(this)" ></a>
+									<b> Default<br>(+&euro;1000) </b>
+									<b> Option 2<br>(+&euro;1000) </b>
+-->
+
+
+					<div class="force-overflow"></div>
+				</div>
+			</div>
+
+			<div class = "scrollcontainer">
+
+				<div id = "summarySidenav" class="scrollbar" onclick="summaryFunction(this)" style = "margin-left: 0px; margin-top: 0px;">
+				<div class="scrollheader" style = "" >Summary</div>
+						<b style = "width: 12.6874vw; margin-top:12.265164644714039vh; margin-left: 1vw; background-color: #D3D3D3; border-radius: 5px; line-height: 100%; font-size: 1.5vw; padding-top: 0.5vw  "> Exterior </b>
+				<a id = "summary1" class="summaryThings" style="background-color : #0000FF;   margin-left: 3.2vw; height: 8vw; width: 8vw; "></a>
+									<b style = "width: 12.6874vw; margin-left: 1vw;  font-size: 0.8vw; margin-bottom: 0px; height: auto;" >Main colour:</b>
+									<b id = "summaryMainColor" style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; margin-top: 0px; " >Blue</b>
+
+				<a id = "summary2" class="summaryThings" style="background-color : #000000;   margin-left: 3.2vw; height: 8vw; width: 8vw;"></a>
+									<b style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; margin-bottom: 0px; height: auto;" >Secondary colour:</b>
+									<b id = "summarySecondaryColor" style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; margin-top: 0px; " >Black</b>
+									
+				<a id = "summary3" class="summaryThings" style="background-color : #0000FF;   margin-left: 3.2vw; height: 8vw; width: 8vw; background: url(/images/WheelDefault.png); background-size: cover;"></a>
+									<b style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; margin-bottom: 0px; height: auto;" >Wheels:</b>
+									<b id = "summaryWheels" style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; margin-top: 0px; " >Default</b>
+
+						<b style = "width: 12.6874vw; margin-top:4vh; margin-left: 1vw; background-color: #D3D3D3; border-radius: 5px; line-height: 100%; font-size: 1.5vw; padding-top: 0.5vw  "> Interior </b>
+				<a id = "summary4" class="summaryThings" style="background-color : #000000;   margin-left: 3.2vw; height: 8vw; width: 8vw;"></a>
+									<b style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; margin-bottom: 0px; height: auto;" >Colour 1:</b>
+									<b id = "summaryColor1" style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; margin-top: 0px; " >Black</b>
+
+				<a id = "summary5" class="summaryThings" style="background-color : #0000FF;   margin-left: 3.2vw; height: 8vw; width: 8vw;"></a>
+									<b style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; margin-bottom: 0px; height: auto;" >Colour 2:</b>
+									<b id = "summaryColor2" style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; margin-top: 0px; " >Blue</b>									
+
+						<b style = "width: 12.6874vw; margin-top:4vh; margin-left: 1vw; background-color: #D3D3D3; border-radius: 5px; line-height: 100%; font-size: 1.5vw; padding-top: 0.5vw  "> Options </b>
+				<a id = "summary6" class="summaryThings summaryOption1" style="background-color : #0000FF;   margin-left: 3.2vw; height: 8vw; width: 8vw; background: url(/images/remoteEngineStart.jpg); background-size: cover; display: none;"></a>
+									<b class="summaryOption1" style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; display: none; " >Remote engine start (+&euro;5000)</b>
+
+				<a id = "summary7" class="summaryThings summaryOption2" style="background-color : #0000FF;   margin-left: 3.2vw; height: 8vw; width: 8vw; background: url(/images/parkAssist3.webp); background-size: cover; display: none;"></a>
+									<b class="summaryOption2" style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; display: none; " >Parking assistance (+&euro;20000)</b>
+									
+				<a id = "summary8" class="summaryThings summaryOption3" style="background-color : #0000FF;   margin-left: 3.2vw; height: 8vw; width: 8vw; background: url(/images/heatedSteeringWheel.jpg); background-size: cover; display: none;"></a>
+									<b class="summaryOption3" style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; display: none; " >Heated steering wheel (+&euro;10000)</b>
+
+				<a id = "summary9" class="summaryThings" style="background-color : #0000FF;   margin-left: 3.2vw; height: 8vw; width: 8vw; background: url(/images/no.png); background-size: cover; display: inline-block;"></a>
+									<b id = "summaryNoOptions" style = "width: 12.6874vw; margin-left: 1vw; font-size: 0.8vw; display: inline-block; " >No options selected</b>
+
+						<b style = "width: 12.6874vw; margin-top:4vh; margin-left: 1vw; background-color: #D3D3D3; border-radius: 5px; line-height: 100%; font-size: 1.5vw; padding-top: 0.5vw  "> Total price </b>
+															<b id = "summaryPrice" style = "width: 12.6874vw; margin-left: 1vw; font-size: 1vw; margin-top: 10px; " >&euro;1.600.000</b>		
+
+					<div class="force-overflow"></div>
+				</div>
+			</div>
+
+
+
+
+		<div id="container"></div>
+		
+		<script>
+
+
+
+
+			let pricetag = 1600000;
+			pricetag = pricetag.toLocaleString();		
+			document.getElementById('price').innerHTML = 'Price: &euro;' + pricetag;
+
+			let metallicPrice = 0;
+			let wheelsPrice = 0;
+			let optionsPrice1 = 0;
+			let optionsPrice2 = 0;
+			let optionsPrice3 = 0;
+			document.getElementById("exteriorSidenav").style.width = "19.531vw";
+
+			function activeFunction(elem) {
+					// get all 'a' elements
+					var a = document.getElementsByTagName('a');
+					// loop through all 'a' elements
+					for (i = 0; i < a.length; i++) {
+						// Remove the class 'active' if it exists
+						a[i].classList.remove('active')
+					}
+					// add 'active' classs to the element that was clicked
+					elem.classList.add('active');
+			}
+
+			function disableSidenavs(){
+				var b = document.getElementsByClassName("sidenav");
+						// loop through all elements
+					for (i = 0; i < b.length; i++) {
+						// Change width to 0px
+						b[i].style.width = "0px"
+
+					}
+			}
+
+			function exteriorFunction(elem)	{
+					activeFunction(elem);
+					disableSidenavs();
+					disableScrollbars();
+
+					document.getElementById("exteriorSidenav").style.width = "19.531vw";
+			}
+
+			function interiorFunction(elem)	{
+					activeFunction(elem);
+					disableSidenavs();
+					disableScrollbars();
+
+					document.getElementById("interiorSidenav").style.width = "19.531vw";
+			}
+
+			function optionsFunction(elem)	{
+					activeFunction(elem);
+					disableSidenavs();
+					disableScrollbars();
+
+					document.getElementById("optionsSidenav").style.width = "19.531vw";
+			}
+
+			function disableScrollbars(){
+				var b = document.getElementsByClassName("scrollbar");
+						// loop through all elements
+					for (i = 0; i < b.length; i++) {
+						// Change width to 0px
+						b[i].style.visibility = "hidden"
+
+					}
+			}
+
+			function exteriormainFunction(elem)	{
+					activeFunction(elem);
+					  if (document.getElementById("exteriormainScrollbar").style.visibility === "visible") {
+						disableScrollbars();	
+						elem.classList.remove('active');
+					  }	else {
+							disableScrollbars();
+							document.getElementById("exteriormainScrollbar").style.visibility = "visible";
+						}		
+					document.getElementById("a-exterior").classList.add('active');
+					
+			}
+
+			function exteriorsecondaryFunction(elem)	{
+					activeFunction(elem);
+					  if (document.getElementById("exteriorsecondaryScrollbar").style.visibility === "visible") {
+						disableScrollbars();	
+						elem.classList.remove('active');
+					  }	else {
+							disableScrollbars();
+							document.getElementById("exteriorsecondaryScrollbar").style.visibility = "visible";
+						}
+					document.getElementById("a-exterior").classList.add('active');
+			}
+
+			function wheelsFunction(elem)	{
+					activeFunction(elem);
+					  if (document.getElementById("wheelsScrollbar").style.visibility === "visible") {
+						disableScrollbars();	
+						elem.classList.remove('active');
+					  }	else {
+							disableScrollbars();
+							document.getElementById("wheelsScrollbar").style.visibility = "visible";
+						}
+					document.getElementById("a-exterior").classList.add('active');
+			}
+
+			function summaryFunction(elem)	{
+						activeFunction(elem);
+						disableSidenavs();
+						disableScrollbars();
+
+
+					  if (document.getElementById("summarySidenav").style.visibility === "visible") {
+						disableScrollbars();	
+						elem.classList.remove('active');
+					  }	else {
+							disableScrollbars();
+							document.getElementById("summarySidenav").style.visibility = "visible";
+						}
+					document.getElementById("a-summary").classList.add('active');
+			}
+
+
+			function pricetagFunction() {
+				pricetag = 1600000 + metallicPrice + wheelsPrice + optionsPrice1 + optionsPrice2 + optionsPrice3;
+				pricetag = pricetag.toLocaleString();		
+				document.getElementById('price').innerHTML = 'Price: &euro;' + pricetag;
+				document.getElementById("summaryPrice").innerHTML = '&euro;' + pricetag;
+			}
+
+			function maincolorPicker(elem) {
+				 const bodyColorInput = elem.style.backgroundColor;
+					document.getElementById("main-colour").style.backgroundColor = elem.style.backgroundColor;
+					document.getElementById("sameAsMain1").style.backgroundColor = elem.style.backgroundColor;
+					document.getElementById("sameAsMain2").style.backgroundColor = elem.style.backgroundColor;
+					if (elem.classList.contains('5000')){
+						metallicPrice = 5000;
+					} else {
+						metallicPrice = 0;
+					};
+					document.getElementById("summary1").style.backgroundColor = elem.style.backgroundColor;
+					document.getElementById("summaryMainColor").textContent = elem.textContent;
+					pricetagFunction();
+
+				}
+
+			function secondarycolorPicker(elem) {
+				 const bodyColorInput = elem.style.backgroundColor;
+					document.getElementById("secondary-colour").style.backgroundColor = elem.style.backgroundColor;
+					document.getElementById("summary2").style.backgroundColor = elem.style.backgroundColor;
+					document.getElementById("summarySecondaryColor").textContent = elem.textContent;
+				}
+
+			function wheelsPicker(elem) {
+				document.getElementById('wheels').style.background = elem.style.background;
+				document.getElementById('summary3').style.background = elem.style.background;
+				document.getElementById("summaryWheels").textContent = elem.textContent;
+					if (elem.classList.contains('5000')){
+						wheelsPrice = 5000;
+					} else if (elem.classList.contains('10000')){
+						wheelsPrice = 10000;
+					} else if (elem.classList.contains('20000')) {
+						wheelsPrice = 20000;
+					} else {
+						wheelsPrice = 0;
+					};
+					pricetagFunction();			
+			}
+
+			function interiormainFunction(elem)	{
+					activeFunction(elem);
+					  if (document.getElementById("interiormainScrollbar").style.visibility === "visible") {
+						disableScrollbars();	
+						elem.classList.remove('active');
+					  }	else {
+							disableScrollbars();
+							document.getElementById("interiormainScrollbar").style.visibility = "visible";
+						}		
+					document.getElementById("a-interior").classList.add('active');
+					
+			}
+
+			function interiorsecondaryFunction(elem)	{
+					activeFunction(elem);
+					  if (document.getElementById("interiorsecondaryScrollbar").style.visibility === "visible") {
+						disableScrollbars();	
+						elem.classList.remove('active');
+					  }	else {
+							disableScrollbars();
+							document.getElementById("interiorsecondaryScrollbar").style.visibility = "visible";
+						}
+					document.getElementById("a-interior").classList.add('active');
+			}
+
+			function steeringWheelFunction(elem)	{
+					activeFunction(elem);
+					  if (document.getElementById("steeringWheelScrollbar").style.visibility === "visible") {
+						disableScrollbars();	
+						elem.classList.remove('active');
+					  }	else {
+							disableScrollbars();
+							document.getElementById("steeringWheelScrollbar").style.visibility = "visible";
+						}
+					document.getElementById("a-interior").classList.add('active');
+			}
+
+			function interiorcolorPickerOne(elem) {
+				 const bodyColorInput = elem.style.backgroundColor;
+					document.getElementById("Interiorcolour1").style.backgroundColor = elem.style.backgroundColor;
+					document.getElementById("summary4").style.backgroundColor = elem.style.backgroundColor;
+					document.getElementById("summaryColor1").textContent = elem.textContent;
+				}
+
+			function interiorcolorPickerTwo(elem) {
+				 const bodyColorInput = elem.style.backgroundColor;
+					document.getElementById("Interiorcolour2").style.backgroundColor = elem.style.backgroundColor;
+					document.getElementById("summary5").style.backgroundColor = elem.style.backgroundColor;
+					document.getElementById("summaryColor2").textContent = elem.textContent;
+				}
+
+			function steeringWheelPicker(elem) {
+				document.getElementById('steeringWheel').style.background = elem.style.background;
+			}
+
+			function checkBox1(elem){
+				var b = document.getElementsByClassName("summaryOption1");
+						// loop through all elements
+					for (i = 0; i < b.length; i++) {
+						// Change width to 0px
+						if (document.getElementById('checkBox1').style.visibility === "hidden") {
+							b[i].style.display = "inline-block"
+						} else {
+							b[i].style.display = "none"
+						}
+
+
+					}
+				if (document.getElementById('checkBox1').style.visibility === "hidden"){
+					document.getElementById('checkBox1').style.visibility = "visible";
+					optionsPrice1 = 5000;
+				}
+				else {
+					document.getElementById('checkBox1').style.visibility = "hidden";
+					optionsPrice1 = 0;
+				}
+				pricetagFunction();
+
+				noneSummaryFunction();
+
+
+			}
+
+			function checkBox2(elem){
+				var b = document.getElementsByClassName("summaryOption2");
+						// loop through all elements
+					for (i = 0; i < b.length; i++) {
+						// Change width to 0px
+						if (document.getElementById('checkBox2').style.visibility === "hidden") {
+							b[i].style.display = "inline-block"
+						} else {
+							b[i].style.display = "none"
+						}
+
+
+					}
+
+				if (document.getElementById('checkBox2').style.visibility === "hidden"){
+					document.getElementById('checkBox2').style.visibility = "visible";
+					optionsPrice2 = 20000;
+				}
+				else {
+					document.getElementById('checkBox2').style.visibility = "hidden";
+					optionsPrice2 = 0;
+				}
+				pricetagFunction();
+
+				noneSummaryFunction();
+			}
+
+			function checkBox3(elem){
+				var b = document.getElementsByClassName("summaryOption3");
+						// loop through all elements
+					for (i = 0; i < b.length; i++) {
+						// Change width to 0px
+						if (document.getElementById('checkBox3').style.visibility === "hidden") {
+							b[i].style.display = "inline-block"
+						} else {
+							b[i].style.display = "none"
+						}
+
+
+					}
+
+				if (document.getElementById('checkBox3').style.visibility === "hidden"){
+					document.getElementById('checkBox3').style.visibility = "visible";
+					optionsPrice3 = 10000;
+				}
+				else {
+					document.getElementById('checkBox3').style.visibility = "hidden";
+					optionsPrice3 = 0;
+				}
+				pricetagFunction();
+
+				noneSummaryFunction();
+			}
+
+			function noneSummaryFunction(){
+				if (document.getElementById("checkBox1").style.visibility === "hidden" && document.getElementById("checkBox2").style.visibility === "hidden" && document.getElementById("checkBox3").style.visibility === "hidden") {
+					document.getElementById("summary9").style.display = "inline-block";
+					document.getElementById("summaryNoOptions").style.display = "inline-block";
+				} else {
+					document.getElementById("summary9").style.display = "none";
+					document.getElementById("summaryNoOptions").style.display = "none";
+				}
+			}
+
+
+
+		</script>
+
+		<script type="module">
+
+			import * as THREE from './threejs/build/three.module.js';
+			import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js';
+
+			import Stats from './threejs/examples/jsm/libs/stats.module.js';
+      
+			import { GUI } from './threejs/examples/jsm/libs/dat.gui.module.js';
+      
+			import { OrbitControls } from './threejs/examples/jsm/controls/OrbitControls.js';
+			import { FirstPersonControls } from './threejs/examples/jsm/controls/FirstPersonControls.js';
+			import { RoomEnvironment } from './threejs/examples/jsm/environments/RoomEnvironment.js';
+
+			import { GLTFLoader } from './threejs/examples/jsm/loaders/GLTFLoader.js';
+			import { DRACOLoader } from './threejs/examples/jsm/loaders/DRACOLoader.js';
+
+			let clock, camera, scene, renderer, mixer, doorAnimation;
+			let stats;
+
+			let grid;
+			let controlsOrbit;
+			let controlsFirstPerson;
+			let settings;
+
+			let exteriorView = true;
+			let doingAnimation = false;
+
+			let sameMain1 = false;
+			let sameMain2 = true;
+
+			const wheelsDefault = [];
+			const wheelsOne = [];
+			const wheelsTwo = [];
+			const wheelsThree = [];
+
+			const steeringWheelDefault = [];
+			const steeringWheelOne = [];
+
+
+
+			function init() {
+				
+				const container = document.getElementById( 'container' );
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setAnimationLoop( render );
+				renderer.outputEncoding = THREE.sRGBEncoding;
+				renderer.toneMapping = THREE.ACESFilmicToneMapping;
+				renderer.toneMappingExposure = 0.85;
+				container.appendChild( renderer.domElement );
+
+				window.addEventListener( 'resize', onWindowResize );
+
+				stats = new Stats();
+				// container.appendChild( stats.dom );
+
+				//
+                  //GUI
+				//const gui = new GUI({ width: 310 });
+				//const folder1 = gui.addFolder( 'Controls' );
+				settings = {
+							'speed': 0,
+							 };
+				//folder1.add( settings, 'speed', 0, 350, 1);
+
+				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 0.1, 100 );
+				camera.position.set( 4.25, 1.4, - 4.5 );
+
+				controlsOrbit = new OrbitControls( camera, container );
+				controlsOrbit.target.set( 0, 0.5, 0 );
+				controlsOrbit.minPolarAngle = Math.PI * 0.4;
+				controlsOrbit.maxPolarAngle =  Math.PI * 0.5;
+				controlsOrbit.minDistance = 3;
+				controlsOrbit.maxDistance = 6;
+				controlsOrbit.autoRotate = true;
+				controlsOrbit.enabled = true;
+				controlsOrbit.enablePan = false;
+
+				controlsFirstPerson = new FirstPersonControls (camera, container);
+				controlsFirstPerson.lookSpeed = 0.05;
+				controlsFirstPerson.noFly = true;
+				controlsFirstPerson.enabled = false;
+
+				const pmremGenerator = new THREE.PMREMGenerator( renderer );
+
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0xeeeeee );
+				scene.environment = pmremGenerator.fromScene( new RoomEnvironment() ).texture;
+				scene.fog = new THREE.Fog( 0xeeeeee, 10, 50 );
+
+				clock = new THREE.Clock();
+
+				const loadingManager = new THREE.LoadingManager( () => {
+	
+					const loadingScreen = document.getElementById( 'loading-screen' );
+					loadingScreen.classList.add( 'fade-out' );
+		
+					// optional: remove loader from DOM via event listener
+					loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+		
+				} );
+
+				grid = new THREE.GridHelper( 100, 40, 0x000000, 0x000000 );
+
+				// grid opacity 0 = invisible
+				grid.material.opacity = 0;
+
+				grid.material.depthWrite = false;
+				grid.material.transparent = true;
+				scene.add( grid );
+
+				// materials
+
+				//Exteior materials
+				const bodyMaterial = new THREE.MeshPhysicalMaterial( {
+					color: 0x0000FF, metalness: 0.4, roughness: 0.4, clearcoat: 0.05, clearcoatRoughness: 0.05
+				} );
+				document.getElementById("main-colour").style.backgroundColor ="#0000FF";
+
+				const detailsMaterial = new THREE.MeshStandardMaterial( {
+					color: 0x000000, metalness: 1.0, roughness: 0.5
+				} );
+
+				const glassMaterial = new THREE.MeshPhysicalMaterial( {
+					color: 0xFFFFFF, metalness: 0, roughness: 0.1, transmission: 0.9, transparent: true, opacity: 0.4
+				} );
+
+
+
+				// Interior materials
+				const interiorOneMaterial = new THREE.MeshPhysicalMaterial( {
+					color: 0x00000, metalness: 0.4, roughness: 0.4, clearcoat: 0.05, clearcoatRoughness: 0.05
+				} );
+				document.getElementById("Interiorcolour1").style.backgroundColor ="#000000";
+
+				const interiorTwoMaterial = new THREE.MeshPhysicalMaterial( {
+					color: 0x0000FF, metalness: 0.6, roughness: 0.4, clearcoat: 0.05, clearcoatRoughness: 0.05
+				} );
+
+				document.getElementById("Interiorcolour2").style.backgroundColor ="#0000FF";
+
+				//Set colors exterior
+				document.querySelectorAll('.mainBodyColor').forEach(item => {
+				  item.addEventListener('click', function () {
+					bodyMaterial.color.set(this.style.backgroundColor);
+					if (this.classList.contains('metallic')) {
+						bodyMaterial.metalness = 1.0;
+						bodyMaterial.roughness = 0.3;
+					} else {
+						bodyMaterial.metalness = 0.4;
+						bodyMaterial.roughness = 0.4;
+					};
+					if (sameMain1 === true){
+						interiorOneMaterial.color.set(this.style.backgroundColor);
+						document.getElementById('Interiorcolour1').style.backgroundColor = this.style.backgroundColor;
+					};
+					if (sameMain2 === true){
+						interiorTwoMaterial.color.set(this.style.backgroundColor);
+						document.getElementById('Interiorcolour2').style.backgroundColor = this.style.backgroundColor;
+					};
+				  })
+				});
+
+
+				document.querySelectorAll('.secondaryBodyColor').forEach(item => {
+				  item.addEventListener('click', function () {
+					detailsMaterial.color.set(this.style.backgroundColor);
+				  })
+				});
+
+
+				// set wheels
+				document.getElementById("wheelsOptionDefault").addEventListener('click', function () {
+					deleteWheels();
+					for ( let i = 0; i < wheelsDefault.length; i ++ ) {
+
+						wheelsDefault[ i ].visible = true ;
+					}
+
+				});
+
+				document.getElementById("wheelsOptionOne").addEventListener('click', function () {
+					deleteWheels();
+					for ( let i = 0; i < wheelsOne.length; i ++ ) {
+
+						wheelsOne[ i ].visible = true ;
+					}
+				});
+
+				document.getElementById("wheelsOptionTwo").addEventListener('click', function () {
+					deleteWheels();
+					for ( let i = 0; i < wheelsTwo.length; i ++ ) {
+
+						wheelsTwo[ i ].visible = true ;
+					}
+				});
+
+				document.getElementById("wheelsOptionThree").addEventListener('click', function () {
+					deleteWheels();
+					for ( let i = 0; i < wheelsThree.length; i ++ ) {
+
+						wheelsThree[ i ].visible = true ;
+					}
+				});
+
+				function deleteWheels(){
+					for ( let i = 0; i < wheelsDefault.length; i ++ ) {
+
+						wheelsDefault[ i ].visible = false ;
+					}
+
+					for ( let i = 0; i < wheelsOne.length; i ++ ) {
+
+						wheelsOne[ i ].visible = false ;
+					}		
+
+					for ( let i = 0; i < wheelsTwo.length; i ++ ) {
+
+						wheelsTwo[ i ].visible = false ;
+					}	
+					
+					for ( let i = 0; i < wheelsThree.length; i ++ ) {
+
+						wheelsThree[ i ].visible = false ;
+					}	
+				}
+
+				// set Steering wheel
+//				document.getElementById("steeringWheelOptionDefault").addEventListener('click', function () {
+	//				for ( let i = 0; i < steeringWheelDefault.length; i ++ ) {
+	//
+		//				steeringWheelDefault[ i ].visible = true ;
+			//		}
+				//	for ( let i = 0; i < steeringWheelOne.length; i ++ ) {
+
+//						steeringWheelOne[ i ].visible = false ;
+//					}
+//				});
+
+//				document.getElementById("steeringWheelOptionOne").addEventListener('click', function () {
+//					for ( let i = 0; i < steeringWheelDefault.length; i ++ ) {
+//
+//						steeringWheelDefault[ i ].visible = false ;
+//					}
+//					for ( let i = 0; i < steeringWheelOne.length; i ++ ) {
+//
+//						steeringWheelOne[ i ].visible = true ;
+//					}
+//				});
+
+				// set colors Interior
+				document.querySelectorAll('.mainInteriorColor').forEach(item => {
+				  item.addEventListener('click', function () {
+					interiorOneMaterial.color.set(this.style.backgroundColor);
+					if (this === document.getElementById("sameAsMain1")){
+						sameMain1 = true;
+					}	else {
+						sameMain1 = false;
+					};
+				  })
+				});
+
+
+				document.querySelectorAll('.secondaryInteriorColor').forEach(item => {
+				  item.addEventListener('click', function () {
+					interiorTwoMaterial.color.set(this.style.backgroundColor);
+					if (this === document.getElementById("sameAsMain2")){
+						sameMain2 = true;
+					}	else {
+						sameMain2 = false;
+					};
+				  })
+				});
+
+				// autorotate thing
+				document.getElementById("rotatePause").addEventListener("click", function() {
+					if (controlsOrbit.autoRotate === true) {
+						controlsOrbit.autoRotate = false;
+					} else if (exteriorView === true) {
+						controlsOrbit.autoRotate = true;
+					}
+				});
+
+				function cameraToExterior(){
+						if (doingAnimation === true) {
+							TWEEN.removeAll();
+						};
+						if (doingAnimation === false) {
+							animateDoors();
+						};
+						doingAnimation = true;
+						controlsOrbit.enabled = false;
+						const vec = new THREE.Vector3( 0, 0, -1 );
+						vec.applyQuaternion( camera.quaternion );
+						vec.add( camera.position );
+						const coords3 = { x: vec.x, y: vec.y, z: vec.z };
+						new TWEEN.Tween(coords3)
+						  .to({ x: 0, y: 0.5, z: 0 })
+						  .delay(1500)
+						  .start();
+
+						const coords = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
+						new TWEEN.Tween(coords)
+						  .to({ x: -6, y: 1.4, z: -1 })
+						  .onUpdate(function() {
+							camera.position.set(coords.x, coords.y, coords.z);
+							camera.lookAt(coords3.x, coords3.y, coords3.z);
+
+						  })
+						  .onComplete(function(){
+							controlsOrbit.target.set( 0, 0.5, 0 );
+							controlsOrbit.minPolarAngle = Math.PI * 0.4;
+							controlsOrbit.maxPolarAngle =  Math.PI * 0.5;
+							controlsOrbit.minDistance = 3;
+							controlsOrbit.autoRotate = true;	
+							controlsOrbit.enableZoom = true;
+							controlsOrbit.enabled = true;
+							doingAnimation = false;
+						  })
+						  .delay(1500)
+						  .start();
+				}
+
+				function animateDoors(){
+						doorAnimation.reset();
+						doorAnimation.setDuration(2);
+						doorAnimation.setLoop(THREE.LoopPingPong, 2);
+						doorAnimation.play();
+				}
+
+				document.getElementById("a-exterior").addEventListener('click', function () {
+
+					if (exteriorView === false) {
+						controlsOrbit.maxDistance = 6;
+
+						cameraToExterior();
+					}
+
+					exteriorView = true;
+										
+				});
+				
+				document.getElementById("a-interior").addEventListener('click', function () {
+					
+					if (exteriorView === true) {
+						if (doingAnimation === true) {
+							TWEEN.removeAll();
+						};
+						animateDoors();
+
+						controlsOrbit.minPolarAngle = 0;
+						controlsOrbit.maxPolarAngle =  Math.PI ;
+						controlsOrbit.minDistance = 0;
+						controlsOrbit.maxDistance = 10;		
+						controlsOrbit.target.set( -0.35 , 1, -0.45 );
+
+						controlsOrbit.autoRotate = false;
+						controlsOrbit.enabled = false;
+
+						const coords2 = { x: 0, y: 0.5, z: 0 };
+						new TWEEN.Tween(coords2)
+						  .to({ x: -0.35, y: 1, z: -0.45 }, 1000)
+						  .start();
+
+						const coords1 = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
+						new TWEEN.Tween(coords1)
+						  .to({ x: -6, y: 1, z: -1 }, 1000)
+						  .onUpdate(function() {
+								camera.position.set(coords1.x, coords1.y, coords1.z);
+								camera.lookAt(coords2.x, coords2.y, coords2.z);
+						  })
+						  .start();
+
+
+
+						doingAnimation = true;
+						const coords = { x: -6, y: 1, z: -1 };
+						new TWEEN.Tween(coords)
+						  .to({ x: -0.35, y: 1, z: 0.45 })
+						  .onUpdate(function() {
+							camera.position.set(coords.x, coords.y, coords.z);
+							camera.lookAt(-0.35 , 1, -0.45);
+
+						  })
+						  .delay(1500)
+						  .onComplete(function() {
+							controlsOrbit.target.set( -0.35 , 1, 0.45 );
+							controlsOrbit.target.z -= 0.01;
+							controlsOrbit.enabled = true;
+							controlsOrbit.enableZoom = false;
+							doingAnimation = false;
+						   })
+						  .start();
+
+					}
+					exteriorView = false;
+
+				});
+
+				document.getElementById("a-options").addEventListener('click', function () {
+
+					if (exteriorView === false) {
+						controlsOrbit.maxDistance = 6;
+
+						cameraToExterior();
+					}
+					exteriorView = true;
+										
+				});
+
+				document.getElementById("a-summary").addEventListener('click', function () {
+
+					if (exteriorView === false) {
+						controlsOrbit.maxDistance = 6;
+
+						cameraToExterior();
+					}
+					exteriorView = true;
+										
+				});
+
+				// Car
+
+				const shadow = new THREE.TextureLoader().load( './threejs/examples/models/gltf/ferrari_ao.png' );
+
+				const dracoLoader = new DRACOLoader();
+				dracoLoader.setDecoderPath( './threejs/examples/js/libs/draco/gltf/' );
+
+				const loader = new GLTFLoader(loadingManager);
+				loader.setDRACOLoader( dracoLoader );
+
+
+
+				loader.load( './Lambo3.glb', function ( gltf ) {
+
+					const carModel = gltf.scene.children[ 0 ];			
+
+
+					// body exterior
+					carModel.getObjectByName( 'Object_103' ).material = bodyMaterial;
+					carModel.getObjectByName( 'Object_64' ).material = bodyMaterial;		          
+					carModel.getObjectByName( 'Object_77' ).material = bodyMaterial;
+					carModel.getObjectByName( 'Object_111' ).material = bodyMaterial;
+					carModel.getObjectByName( 'Object_10F' ).material = bodyMaterial;          
+					carModel.getObjectByName( 'Object_10' ).material = bodyMaterial;
+
+
+
+
+
+					
+					
+					carModel.getObjectByName( 'Object_96').material = carModel.getObjectByName( 'Object_95').material;
+
+					// details exterior
+					carModel.getObjectByName( 'Object_110' ).material = detailsMaterial;
+					carModel.getObjectByName( 'Object_94' ).material = detailsMaterial;
+					carModel.getObjectByName( 'Object_65' ).material = detailsMaterial;
+					carModel.getObjectByName( 'Object_78' ).material = detailsMaterial;   
+
+					//Interior one
+					carModel.getObjectByName( 'Object_39' ).material = interiorOneMaterial;
+					carModel.getObjectByName( 'Object_84' ).material = interiorOneMaterial;
+					carModel.getObjectByName( 'Object_71' ).material = interiorOneMaterial;	
+
+					//Interior two
+					carModel.getObjectByName( 'Object_54' ).material = interiorTwoMaterial;
+
+					carModel.getObjectByName( 'Object_51' ).material = interiorTwoMaterial;
+				
+
+					// glass
+					carModel.getObjectByName( 'Object_90' ).material = glassMaterial;
+					carModel.getObjectByName( 'Object_68' ).material = glassMaterial;
+          			carModel.getObjectByName( 'Object_81' ).material = glassMaterial;
+					carModel.getObjectByName( 'Object_90' ).material = glassMaterial;
+					carModel.getObjectByName( 'Object_91' ).material = glassMaterial;
+					carModel.getObjectByName( 'Object_89' ).material = glassMaterial;
+					glassMaterial.side = THREE.DoubleSide;
+
+					// doublesided roof
+					carModel.getObjectByName( 'Object_103').material.side = THREE.DoubleSide;
+					carModel.getObjectByName( 'Object_110').material.side = THREE.DoubleSide;
+
+					wheelsDefault.push(
+						carModel.getObjectByName( 'R_wheels' ),
+						carModel.getObjectByName( 'F_wheels' ),
+						carModel.getObjectByName( 'Brake_R' ),
+						carModel.getObjectByName( 'Brake_F' )
+					);
+
+					steeringWheelDefault.push(
+					carModel.getObjectByName( 'Object_47'),
+					carModel.getObjectByName( 'Object_48'),
+					carModel.getObjectByName( 'Object_49'),
+					carModel.getObjectByName( 'Object_50'),
+					carModel.getObjectByName( 'Object_51'),
+					carModel.getObjectByName( 'Object_52')
+					);
+
+					// shadow
+					const mesh = new THREE.Mesh(
+						new THREE.PlaneGeometry( 0.655 * 4, 1.3 * 4 ),
+						new THREE.MeshBasicMaterial( {
+							map: shadow, blending: THREE.MultiplyBlending, toneMapped: false, transparent: true
+						} )
+					);
+					mesh.rotation.x = - Math.PI *2;
+					mesh.rotation.y = 0;
+					mesh.renderOrder = 2;
+					//carModel.add( mesh );
+
+					scene.add( gltf.scene );
+					mixer = new THREE.AnimationMixer( gltf.scene );   
+
+
+					doorAnimation = mixer.clipAction( gltf.animations[ 0 ] );
+
+
+				} );
+				loader.load( './showroom13.glb', function ( gltf ) {
+
+					const showRoom = gltf.scene.children[ 0 ];
+
+					scene.add( showRoom );
+
+					
+				} );
+
+				loader.load( './Wheels2.glb', function ( gltf ) {
+
+					const wheelsOneModel = gltf.scene.children[ 0 ];
+
+					wheelsOneModel.getObjectByName( 'Wheel2_Rim' ).material = bodyMaterial;
+					wheelsOneModel.getObjectByName( 'Wheel2_Rim2' ).material = bodyMaterial;
+					wheelsOneModel.getObjectByName( 'Wheel2_Rim3' ).material = bodyMaterial;
+					wheelsOneModel.getObjectByName( 'Wheel2_Rim1' ).material = bodyMaterial;
+
+					wheelsOneModel.visible = false;
+
+
+					wheelsOne.push(
+						wheelsOneModel.getObjectByName( 'Wheel_RR' )
+					);
+
+					scene.add( wheelsOneModel );
+
+					
+				} );
+
+				loader.load( './WheelsOption2.glb', function ( gltf ) {
+
+					const wheelsTwoModel = gltf.scene.children[ 0 ];
+
+					wheelsTwoModel.getObjectByName( 'Wheels_3_Ring1' ).material = bodyMaterial;
+					wheelsTwoModel.getObjectByName( 'Wheels_3_Ring2' ).material = bodyMaterial;
+					wheelsTwoModel.getObjectByName( 'Wheels_3_Ring3' ).material = bodyMaterial;
+					wheelsTwoModel.getObjectByName( 'Wheels_3_Ring4' ).material = bodyMaterial;
+
+					wheelsTwoModel.visible = false;
+
+
+					wheelsTwo.push(
+						wheelsTwoModel.getObjectByName( 'Wheels_3' )
+					);
+
+					scene.add( wheelsTwoModel );
+
+					
+				} );
+
+				loader.load( './WheelsOption3.glb', function ( gltf ) {
+
+					const wheelsThreeModel = gltf.scene.children[ 0 ];
+
+					wheelsThreeModel.getObjectByName( 'Wheel_Option_3_Ring1' ).material = bodyMaterial;
+					wheelsThreeModel.getObjectByName( 'Wheel_Option_3_Ring2' ).material = bodyMaterial;
+					wheelsThreeModel.getObjectByName( 'Wheel_Option_3_Ring3' ).material = bodyMaterial;
+					wheelsThreeModel.getObjectByName( 'Wheel_Option_3_Ring4' ).material = bodyMaterial;
+
+					wheelsThreeModel.visible = false;
+
+
+					wheelsThree.push(
+						wheelsThreeModel.getObjectByName( 'WheelsOptionThree' )
+					);
+
+					scene.add( wheelsThreeModel );
+
+					
+				} );
+
+				loader.load( './SteeringWheelOption1.glb', function ( gltf ) {
+
+					const steeringWheelOneModel = gltf.scene.children[ 0 ];
+
+					steeringWheelOneModel.visible = false;
+
+					steeringWheelOne.push(
+						steeringWheelOneModel.getObjectByName( 'steeringWheelOption1' )
+					);
+
+					scene.add( steeringWheelOneModel );
+
+					
+				} );					
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			var intervalID = setInterval(wheelRotation, 5)
+
+			function wheelRotation() {
+				for ( let i = 0; i < wheelsDefault.length; i ++ ) {
+
+					wheelsDefault[ i ].rotation.x += settings['speed'] / 3.6 / 100 / 2 * Math.PI ;
+				}
+				grid.position.z = (grid.position.z + (settings['speed'] / 3.6 / 100 / 2)) % 5;
+			}
+			
+			function render() {
+
+				const time = - performance.now() / 1000;
+
+
+
+ 
+  var delta = clock.getDelta();
+  
+  if ( mixer ) mixer.update( delta );
+
+				renderer.render( scene, camera );
+
+				stats.update();			
+				if (controlsOrbit.enabled === true) {
+					controlsOrbit.update();
+				};
+
+				if (controlsFirstPerson.enabled === true) {
+					controlsFirstPerson.update( clock.getDelta() );
+				};
+
+				TWEEN.update();
+			}
+
+
+
+			function onTransitionEnd( event ) {
+
+				event.target.remove();
+	
+			}
+
+			init();
+
+		</script>
+
+	</body>
+</html>
